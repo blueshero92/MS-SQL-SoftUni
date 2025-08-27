@@ -106,6 +106,13 @@ DEFAULT GETDATE() FOR LastLoginTime
 ALTER TABLE Users
 DROP[UQ__Users__536C85E4CB7F9C68]
 
+ALTER TABLE [Users]
+DROP [PK_Id_Username_Composite];
+
+ALTER TABLE [Users]
+ADD CONSTRAINT [PK_Id]
+PRIMARY KEY ([Id])
+
 ALTER TABLE Users
 ADD CONSTRAINT[Check_Username_Min_3]
 CHECK(LEN([Username]) >= 3);
@@ -501,4 +508,5 @@ SET TaxRate -= TaxRate * 0.03;
 SELECT TaxRate FROM Payments;
 
 --Problem 24 Delete All Records
+
 TRUNCATE TABLE Occupancies;
