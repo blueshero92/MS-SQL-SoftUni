@@ -224,6 +224,8 @@ SELECT ProductName,
 
 GO
 
+--Problem 19 People Table
+
 CREATE TABLE People (
 Id INT PRIMARY KEY IDENTITY(1, 1),
 [Name] VARCHAR(60) NOT NULL,
@@ -242,4 +244,5 @@ SELECT [Name],
 	   DATEDIFF(MONTH, Birthdate, GETDATE()) AS [Age in Months],
 	   DATEDIFF(DAY, Birthdate, GETDATE()) AS [Age in Days],
 	   DATEDIFF(MINUTE, Birthdate, GETDATE()) AS [Age in Minutes]
+
  FROM People;
