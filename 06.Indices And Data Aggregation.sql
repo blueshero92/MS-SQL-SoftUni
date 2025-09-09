@@ -39,12 +39,22 @@ GROUP BY [DepositGroup];
 
 --Problem 06 Deposits Sum for Ollivander Family
 
+  --Solution 1
+    SELECT [DepositGroup],
+         SUM([DepositAmount])
+      AS [TotalSum]
+    FROM [WizzardDeposits]
+   WHERE [MagicWandCreator] = 'Ollivander family'
+GROUP BY [DepositGroup];
+
+  --Solution 2
   SELECT [DepositGroup],
      SUM ([DepositAmount])
 	  AS [TotalSum]
     FROM WizzardDeposits
 GROUP BY [MagicWandCreator], [DepositGroup]
   HAVING MagicWandCreator = 'Ollivander family'
+
 
 --Problem 07 Deposits Filter
 
@@ -179,3 +189,4 @@ SELECT COUNT([Salary])
   FROM [Employees]
 
  WHERE [ManagerID] IS NULL;
+
