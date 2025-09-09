@@ -1,6 +1,6 @@
 SELECT * FROM WizzardDeposits
 
---Problem 01 Records’ Count
+--Problem 01 Recordsâ€™ Count
 
   SELECT COUNT([Id]) 
       AS [Count]
@@ -49,11 +49,12 @@ GROUP BY [MagicWandCreator], [DepositGroup]
 --Problem 07 Deposits Filter
 
   SELECT [DepositGroup],
-     SUM ([DepositAmount])
-	  AS [TotalSum]
-    FROM WizzardDeposits
-  WHERE MagicWandCreator = 'Ollivander family' AND [DepositAmount] < 15000
-GROUP BY [MagicWandCreator], [DepositGroup]
+         SUM([DepositAmount])
+      AS [TotalSum]
+    FROM [WizzardDeposits]
+   WHERE [MagicWandCreator] = 'Ollivander family'
+GROUP BY [DepositGroup]
+  HAVING SUM([DepositAmount]) < 150000
 ORDER BY [TotalSum] DESC;
 
 --Problem 08 Deposit Charge
@@ -176,4 +177,5 @@ GROUP BY [DepartmentID]
 SELECT COUNT([Salary])
     AS [Count]
   FROM [Employees]
+
  WHERE [ManagerID] IS NULL;
