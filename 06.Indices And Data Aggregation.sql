@@ -125,6 +125,28 @@ ORDER BY [DepositGroup] DESC,
          [IsDepositExpired];
 
 
+--Problem 12 Rich Wizard, Poor Wizard
+
+SELECT SUM([Difference]) 
+    AS [SumDifference]
+  FROM
+         (
+           SELECT [hw].[FirstName] AS [Host Wizard],
+                  [hw].[DepositAmount] AS [Host Wizard Deposit],
+           	      [gw].[FirstName] AS [Guest Wizard],
+                  [gw].[DepositAmount] AS [Guest Wizard Deposit],
+           	      [hw].[DepositAmount] - [gw].[DepositAmount] AS [Difference]	   
+             FROM [WizzardDeposits]
+               AS [hw]
+             JOIN [WizzardDeposits]
+               AS [gw]
+           	   ON [hw].[Id] = [gw].[Id] - 1
+		  ) 
+	 AS [DifferenceTempTable];
+
+
+
+
 GO
 
 USE SoftUni;
@@ -189,4 +211,5 @@ SELECT COUNT([Salary])
   FROM [Employees]
 
  WHERE [ManagerID] IS NULL;
+
 
