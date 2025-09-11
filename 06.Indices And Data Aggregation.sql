@@ -213,3 +213,42 @@ SELECT COUNT([Salary])
  WHERE [ManagerID] IS NULL;
 
 
+
+--Problem 18 3rd Highest Salary
+
+SELECT [DepartmentID],
+       [Salary] 
+	   AS [ThirdHighestSalary]
+  FROM (
+           SELECT [DepartmentID],
+		          [Salary],
+                  DENSE_RANK() OVER (PARTITION BY [DepartmentID] ORDER BY [Salary] DESC)
+         		  AS [Rank]				  
+             FROM [Employees]         
+       ) AS [SalaryRank]
+ WHERE [Rank] = 3
+ GROUP BY [DepartmentID],
+          [Salary]
+
+
+
+
+--Problem 19 Salary Challenge
+
+  SELECT 
+     TOP (10)
+	     [FirstName],
+         [LastName],
+  	     [DepartmentID]
+    FROM [Employees]
+      AS [e1]
+   WHERE [e1].[Salary] >
+                         (  SELECT AVG([e2].[Salary]) AS [AvgSalary]
+                              FROM [Employees]
+		  	                    AS [e2]
+  		                     WHERE [e2].[DepartmentID] = [e1].[DepartmentID]
+	                     )
+ORDER BY [DepartmentID];
+
+
+
