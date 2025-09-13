@@ -182,32 +182,36 @@ GO
 
 --Problem 12 Calculating Interest
 
-  CREATE
-      OR
-   ALTER
-    PROC [usp_CalculateFutureValueForAccount] (@accountId INT, @interestRate FLOAT)
-      AS
-  SELECT 
-     TOP 1
-         [a].[Id]
-      AS [Account Id],
-	     [ah].[FirstName]
-	  AS [First Name],
-	     [ah].[LastName]
-	  AS [Last Name],
-	     SUM([Balance])
-	  AS [Current Balance],
-	     [dbo].[ufn_CalculateFutureValue] (SUM([Balance]), @interestRate, 5) 
-	  AS [Balance in 5 years]
-    FROM [AccountHolders]
-	  AS [ah]
-    JOIN [Accounts]
-	  AS [a]
-	  ON [ah].[Id] = [a].[AccountHolderId]
-   WHERE [a].[Id] = @accountId
-GROUP BY [a].[Id],[FirstName], [LastName]
+CREATE
+    OR
+ ALTER
+  PROC [dbo].[usp_CalculateFutureValueForAccount] (@AccountId INT, @InterestRate FLOAT)
+    AS 
+	  (
+	       SELECT [a].[Id]
+		          AS [Account Id],
+				  [ah].[FirstName]
+				  AS [First Name],
+				  [ah].[LastName]
+				  AS [Last Name],
+				  [a].[Balance]
+				  AS [Current Balance], 
+				  [dbo].[ufn_CalculateFutureValue] ([a].[Balance], @InterestRate, 5)
+				  AS [Balance in 5 years]
+		     FROM [AccountHolders]
+		       AS [ah]
+		     JOIN [Accounts]
+		       AS [a]
+			   ON [a].[AccountHolderId] = [ah].[Id]
+			WHERE [a].[Id] = @AccountId
+		 GROUP BY [a].[Id],
+		          [ah].[FirstName],
+				  [ah].[LastName],
+				  [a].[Balance]
+	 );
 
 
 GO
+
 
 EXEC [dbo].[usp_CalculateFutureValueForAccount] 4, 0.1
