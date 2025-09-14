@@ -121,6 +121,76 @@ RETURNS
 
 GO
 
+
+
+
+--Problem 08 Delete Employees and Departments
+
+CREATE
+    OR
+ ALTER
+  PROC [dbo].[usp_DeleteEmployeesFromDepartment] @DepartmentId INT
+    AS
+ BEGIN	  
+	    DELETE 
+		  FROM [EmployeesProjects]
+	     WHERE [EmployeeID] IN
+		                       (
+			                      SELECT [EmployeeID]
+				                    FROM [Employees]				                   
+				                   WHERE [DepartmentID] = @DepartmentId
+			                   );
+
+		UPDATE [Employees]
+		   SET [ManagerID] = NULL
+		 WHERE [ManagerID] IN 
+		                      (
+			                      SELECT [EmployeeID]
+				                    FROM [Employees]				                   
+				                   WHERE [DepartmentID] = @DepartmentId
+			                   );
+
+	  
+        ALTER TABLE [Departments]
+	    ALTER COLUMN [ManagerId] INT NULL
+
+
+		UPDATE [Departments]
+		   SET [ManagerID] = NULL
+		 WHERE [ManagerID] IN 
+		                      (
+			                      SELECT [EmployeeID]
+				                    FROM [Employees]				                   
+				                   WHERE [DepartmentID] = @DepartmentId
+			                   );
+
+
+		DELETE
+		  FROM [Employees]
+		 WHERE [DepartmentID] = @DepartmentId
+		                         
+		
+		DELETE 
+		  FROM [Departments]
+		 WHERE [DepartmentID] = @DepartmentId
+
+
+		SELECT COUNT(*)
+		    AS [Count]
+		  FROM [Employees]
+		 WHERE [DepartmentId] = @DepartmentId;
+								 
+   END;
+   
+	 
+
+EXEC [dbo].[usp_DeleteEmployeesFromDepartment] 10;
+
+
+
+
+GO
+
 USE Bank;
 
 --Problem 09 Find Full Name
@@ -215,3 +285,4 @@ GO
 
 
 EXEC [dbo].[usp_CalculateFutureValueForAccount] 4, 0.1
+
