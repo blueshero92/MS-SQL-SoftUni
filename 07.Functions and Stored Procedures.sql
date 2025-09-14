@@ -286,3 +286,42 @@ GO
 
 EXEC [dbo].[usp_CalculateFutureValueForAccount] 4, 0.1
 
+
+GO
+
+
+--Problem 13 Cash in User Games Odd Rows 
+
+
+  CREATE
+      OR
+   ALTER
+FUNCTION [dbo].[ufn_CashInUsersGames] (@GameName VARCHAR(80))
+ RETURNS
+   TABLE
+      AS
+        RETURN 
+	           SELECT SUM([Cash])
+	                  AS [SumCash]
+		         FROM 
+				     (
+                      SELECT [ug].[Cash],       
+	                         ROW_NUMBER() OVER (ORDER BY [Cash] DESC) 
+						     AS [RowNumber]
+                        FROM [UsersGames]
+                          AS [ug]
+                        JOIN [Games]
+                          AS [g]
+                   	      ON [ug].[GameId] = [g].[Id]
+	            	   WHERE [g].[Name] = @GameName
+                    GROUP BY [Cash]
+					 ) 
+				   AS [RowNumberTemp]
+				WHERE [RowNumber] % 2 = 1;
+
+GO
+           
+SELECT *
+  FROM [dbo].[ufn_CashInUsersGames] ('Love in a mist');
+
+
